@@ -10,11 +10,6 @@
   <main class="auth-card instructor-card">
     <div class="auth-heading"><h1>Instructor Login</h1><a class="back" href="index.html">Back</a></div>
     <p class="description">Access academy match and training information.</p>
-    <div class="registration-status" aria-live="polite">
-      <strong id="registrationCount">0</strong>
-      <span>registration requests received</span>
-      <small>Live count · Updated <time id="registrationUpdated">just now</time></small>
-    </div>
     <form id="loginForm">
       <label for="email">Email<input id="email" type="email" placeholder="coach@simhaacademy.com" required></label>
       <label for="password">Password<input id="password" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="Enter numeric password" required></label>
@@ -29,34 +24,18 @@
         <ul id="visitorsList" class="visitor-list"></ul>
       </section>
       <section class="dashboard-section">
-        <h3>Next match</h3>
-        <p class="dashboard-note">These details update the upcoming match shown on the index page.</p>
-        <form id="matchForm" class="score-form">
-          <label for="matchGroup">Group or match name<input id="matchGroup" type="text" required></label>
+        <h3>Upcoming matches</h3>
+        <p class="dashboard-note">Add, edit, or delete matches and their Maps links.</p>
+        <ul id="managedMatches" class="managed-matches"></ul>
+        <form id="matchManagerForm" class="score-form">
+          <label for="managedMatchGroup">Group or match name<input id="managedMatchGroup" type="text" required></label>
           <div class="score-fields">
-            <label for="matchDate">Date<input id="matchDate" type="date" required></label>
-            <label for="matchTime">Time<input id="matchTime" type="time" required></label>
+            <label for="managedMatchDate">Date<input id="managedMatchDate" type="date" required></label>
+            <label for="managedMatchTime">Time<input id="managedMatchTime" type="time" required></label>
+            <label for="managedMatchMaps">Maps link<input id="managedMatchMaps" type="url" placeholder="https://maps.google.com/"></label>
           </div>
-          <button type="submit">Save next match</button>
-          <div id="matchMessage" role="status"></div>
-        </form>
-      </section>
-      <section class="dashboard-section">
-        <h3>Edit Match centre</h3>
-        <p class="dashboard-note">Correct upcoming details, previous results, or the latest scorecard shown on the index page.</p>
-        <form id="matchCentreForm" class="score-form">
-          <label for="secondGroup">Second upcoming match<input id="secondGroup" type="text" required></label>
-          <label for="secondDate">Second match date<input id="secondDate" type="date" required></label>
-          <label for="previousOne">Previous result 1<textarea id="previousOne" rows="2" required></textarea></label>
-          <label for="previousTwo">Previous result 2<textarea id="previousTwo" rows="2" required></textarea></label>
-          <label for="scorecardTeam">Scorecard team<input id="scorecardTeam" type="text" required></label>
-          <div class="score-fields">
-            <label for="scorecardRuns">Scorecard runs<input id="scorecardRuns" type="number" min="0" required></label>
-            <label for="scorecardWickets">Scorecard wickets<input id="scorecardWickets" type="number" min="0" max="10" required></label>
-            <label for="scorecardOvers">Scorecard overs<input id="scorecardOvers" type="text" required></label>
-          </div>
-          <button type="submit">Save Match centre</button>
-          <div id="matchCentreMessage" role="status"></div>
+          <button type="submit">Add upcoming match</button>
+          <div id="matchManagerMessage" role="status"></div>
         </form>
       </section>
     </section>

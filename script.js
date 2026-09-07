@@ -6,94 +6,87 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   const visitorsKey = 'simhaVisitors';
-  const liveScoreKey = 'simhaLiveScore';
-  const nextMatchKey = 'simhaNextMatch';
-  const matchCentreKey = 'simhaMatchCentre';
-  const defaultLiveScore = {
-    team: 'Simha Academy',
-    runs: '0',
-    wickets: '0',
-    overs: '0.0',
-    status: 'Match has not started'
-  };
-  const defaultNextMatch = {
-    date: '2026-09-12',
-    time: '10:00',
-    group: 'U-16 Challenge Cup'
-  };
-  const defaultMatchCentre = {
-    secondGroup: 'District League',
-    secondDate: '2026-09-18',
-    previousOne: 'Simha Academy beat City Stars by 18 runs.',
-    previousTwo: 'Simha Academy won by 7 wickets vs Greenfield XI.',
-    scoreTeam: 'Simha Academy',
-    scoreRuns: '165',
-    scoreWickets: '7',
-    scoreOvers: '20.0'
-  };
+  const matchesKey = 'simhaUpcomingMatches';
+  const defaultMatches = [
+    { id: 'match-1', group: 'U-16 Challenge Cup', date: '2026-09-12', time: '10:00' },
+    { id: 'match-2', group: 'District League', date: '2026-09-18', time: '10:00' }
+  ];
 
-  function getLiveScore() {
+  function getMatches() {
     try {
-      return { ...defaultLiveScore, ...JSON.parse(localStorage.getItem(liveScoreKey) || '{}') };
+      const saved = JSON.parse(localStorage.getItem(matchesKey));
+      if (Array.isArray(saved)) return saved;
     } catch (error) {
-      return defaultLiveScore;
+      return defaultMatches;
     }
+    try {
+      const first = JSON.parse(localStorage.getItem('simhaNextMatch'));
+      const second = JSON.parse(localStorage.getItem('simhaMatchCentre'));
+      if (first || second) {
+        const migrated = [
+          { id: 'match-1', group: first?.group || defaultMatches[0].group, date: first?.date || defaultMatches[0].date, time: first?.time || defaultMatches[0].time },
+          { id: 'match-2', group: second?.secondGroup || defaultMatches[1].group, date: second?.secondDate || defaultMatches[1].date, time: '10:00' }
+        ];
+        saveMatches(migrated);
+        return migrated;
+      }
+    } catch (error) {
+      return defaultMatches;
+    }
+    return defaultMatches;
   }
 
-  function updateLiveScore() {
-    const score = getLiveScore();
-    document.querySelectorAll('[data-live-score]').forEach(function (element) {
-      element.textContent = `${score.team} ${score.runs}/${score.wickets} · ${score.overs} overs`;
+  function saveMatches(matches) {
+    localStorage.setItem(matchesKey, JSON.stringify(matches));
+  }
+
+  function renderMatches() {
+    const list = document.querySelector('[data-upcoming-matches]');
+    const now = Date.now();
+    const matches = getMatches()
+      .map(function (match) {
+        return { match: match, timestamp: new Date(`${match.date}T${match.time}`).getTime() };
+      })
+      .filter(function (entry) {
+        return Number.isFinite(entry.timestamp) && entry.timestamp >= now;
+      })
+      .sort(function (first, second) {
+        return first.timestamp - second.timestamp;
+      })
+      .map(function (entry) {
+        return entry.match;
+      });
+    const formatMatch = function (match) {
+      const date = new Date(`${match.date}T${match.time}`).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' });
+      return `${match.group} · ${date} · ${match.time}`;
+    };
+    const summary = document.querySelector('[data-next-match-summary]');
+    if (summary) summary.textContent = matches.length ? formatMatch(matches[0]) : 'No upcoming matches scheduled.';
+    if (!list) return;
+    list.replaceChildren();
+    matches.forEach(function (match) {
+      const item = document.createElement('li');
+      const title = document.createElement('strong');
+      const details = document.createElement('span');
+      item.className = 'upcoming-match-item';
+      title.textContent = match.group;
+      details.textContent = formatMatch(match).replace(`${match.group} · `, '');
+      item.append(title, details);
+      if (match.maps) {
+        const mapsLink = document.createElement('a');
+        mapsLink.href = match.maps;
+        mapsLink.target = '_blank';
+        mapsLink.rel = 'noopener noreferrer';
+        mapsLink.textContent = 'Maps';
+        item.appendChild(mapsLink);
+      }
+      list.appendChild(item);
     });
-    const statusElement = document.querySelector('[data-live-status]');
-    if (statusElement) statusElement.textContent = score.status;
-  }
-
-  function getNextMatch() {
-    try {
-      return { ...defaultNextMatch, ...JSON.parse(localStorage.getItem(nextMatchKey) || '{}') };
-    } catch (error) {
-      return defaultNextMatch;
+    if (!getMatches().length) {
+      const empty = document.createElement('li');
+      empty.textContent = 'No upcoming matches scheduled.';
+      list.appendChild(empty);
     }
-  }
-
-  function updateNextMatch() {
-    const match = getNextMatch();
-    const dateElement = document.querySelector('[data-next-match-date]');
-    const timeElement = document.querySelector('[data-next-match-time]');
-    const groupElement = document.querySelector('[data-next-match-group]');
-    if (dateElement) dateElement.textContent = new Date(`${match.date}T${match.time}`).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' });
-    if (timeElement) timeElement.textContent = match.time;
-    if (groupElement) groupElement.textContent = match.group;
-  }
-
-  function getMatchCentre() {
-    try {
-      return { ...defaultMatchCentre, ...JSON.parse(localStorage.getItem(matchCentreKey) || '{}') };
-    } catch (error) {
-      return defaultMatchCentre;
-    }
-  }
-
-  function updateMatchCentre() {
-    const centre = getMatchCentre();
-    const firstMatch = getNextMatch();
-    const firstDate = new Date(`${firstMatch.date}T${firstMatch.time}`).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' });
-    const secondDate = new Date(`${centre.secondDate}T00:00:00`).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' });
-    const upcomingFirst = document.querySelector('[data-upcoming-first]');
-    const upcomingSecond = document.querySelector('[data-upcoming-second]');
-    if (upcomingFirst) upcomingFirst.textContent = `${firstMatch.group} · ${firstDate}`;
-    if (upcomingSecond) upcomingSecond.textContent = `${centre.secondGroup} · ${secondDate}`;
-    const previousOne = document.querySelector('[data-previous-one]');
-    const previousTwo = document.querySelector('[data-previous-two]');
-    const scoreTeam = document.querySelector('[data-scorecard-team]');
-    const scoreValue = document.querySelector('[data-scorecard-value]');
-    const scoreOvers = document.querySelector('[data-scorecard-overs]');
-    if (previousOne) previousOne.textContent = centre.previousOne;
-    if (previousTwo) previousTwo.textContent = centre.previousTwo;
-    if (scoreTeam) scoreTeam.textContent = centre.scoreTeam;
-    if (scoreValue) scoreValue.textContent = `${centre.scoreRuns}/${centre.scoreWickets}`;
-    if (scoreOvers) scoreOvers.textContent = centre.scoreOvers;
   }
 
   const visitorForm = document.getElementById('visitorForm');
@@ -178,9 +171,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const loginForm = document.getElementById('loginForm');
   const instructorDashboard = document.getElementById('instructorDashboard');
   const visitorsList = document.getElementById('visitorsList');
-  const scoreForm = document.getElementById('scoreForm');
-  const matchForm = document.getElementById('matchForm');
-  const matchCentreForm = document.getElementById('matchCentreForm');
+  const matchManagerForm = document.getElementById('matchManagerForm');
+  const managedMatches = document.getElementById('managedMatches');
 
   function renderVisitors() {
     if (!visitorsList) return;
@@ -217,85 +209,77 @@ document.addEventListener('DOMContentLoaded', function () {
         loginForm.hidden = true;
         if (instructorDashboard) instructorDashboard.hidden = false;
         renderVisitors();
-        updateLiveScore();
-        updateNextMatch();
-        updateMatchCentre();
+        renderManagedMatches();
       }
     });
   }
 
-  if (scoreForm) {
-    const score = getLiveScore();
-    document.getElementById('scoreTeam').value = score.team;
-    document.getElementById('scoreRuns').value = score.runs;
-    document.getElementById('scoreWickets').value = score.wickets;
-    document.getElementById('scoreOvers').value = score.overs;
-    document.getElementById('scoreStatus').value = score.status;
-    scoreForm.addEventListener('submit', function (event) {
-      event.preventDefault();
-      localStorage.setItem(liveScoreKey, JSON.stringify({
-        team: document.getElementById('scoreTeam').value.trim() || defaultLiveScore.team,
-        runs: document.getElementById('scoreRuns').value,
-        wickets: document.getElementById('scoreWickets').value,
-        overs: document.getElementById('scoreOvers').value,
-        status: document.getElementById('scoreStatus').value.trim() || defaultLiveScore.status
-      }));
-      document.getElementById('scoreMessage').textContent = 'Live score updated.';
-      updateLiveScore();
+  function renderManagedMatches() {
+    if (!managedMatches) return;
+    managedMatches.replaceChildren();
+    getMatches().forEach(function (match) {
+      const item = document.createElement('li');
+      item.className = 'managed-match';
+      item.innerHTML = `<input class="managed-match-group" type="text" value="${match.group.replace(/"/g, '&quot;')}" aria-label="Match name">
+        <input class="managed-match-date" type="date" value="${match.date}" aria-label="Match date">
+        <input class="managed-match-time" type="time" value="${match.time}" aria-label="Match time">
+        <input class="managed-match-maps" type="url" value="${(match.maps || '').replace(/"/g, '&quot;')}" placeholder="Maps URL" aria-label="Maps link">
+        <button type="button" class="save-match" data-match-id="${match.id}">Save</button>
+        <button type="button" class="delete-match" data-match-id="${match.id}">Delete</button>`;
+      managedMatches.appendChild(item);
     });
   }
 
-  if (matchForm) {
-    const match = getNextMatch();
-    document.getElementById('matchDate').value = match.date;
-    document.getElementById('matchTime').value = match.time;
-    document.getElementById('matchGroup').value = match.group;
-    matchForm.addEventListener('submit', function (event) {
+  if (matchManagerForm) {
+    matchManagerForm.addEventListener('submit', function (event) {
       event.preventDefault();
-      localStorage.setItem(nextMatchKey, JSON.stringify({
-        date: document.getElementById('matchDate').value,
-        time: document.getElementById('matchTime').value,
-        group: document.getElementById('matchGroup').value.trim() || defaultNextMatch.group
-      }));
-      document.getElementById('matchMessage').textContent = 'Next match updated.';
-      updateNextMatch();
+      const matches = getMatches();
+      matches.push({
+        id: `match-${Date.now()}`,
+        group: document.getElementById('managedMatchGroup').value.trim(),
+        date: document.getElementById('managedMatchDate').value,
+        time: document.getElementById('managedMatchTime').value,
+        maps: document.getElementById('managedMatchMaps').value.trim()
+      });
+      saveMatches(matches);
+      matchManagerForm.reset();
+      document.getElementById('matchManagerMessage').textContent = 'Upcoming match added.';
+      renderManagedMatches();
+      renderMatches();
     });
   }
 
-  if (matchCentreForm) {
-    const centre = getMatchCentre();
-    document.getElementById('secondGroup').value = centre.secondGroup;
-    document.getElementById('secondDate').value = centre.secondDate;
-    document.getElementById('previousOne').value = centre.previousOne;
-    document.getElementById('previousTwo').value = centre.previousTwo;
-    document.getElementById('scorecardTeam').value = centre.scoreTeam;
-    document.getElementById('scorecardRuns').value = centre.scoreRuns;
-    document.getElementById('scorecardWickets').value = centre.scoreWickets;
-    document.getElementById('scorecardOvers').value = centre.scoreOvers;
-    matchCentreForm.addEventListener('submit', function (event) {
-      event.preventDefault();
-      localStorage.setItem(matchCentreKey, JSON.stringify({
-        secondGroup: document.getElementById('secondGroup').value.trim() || defaultMatchCentre.secondGroup,
-        secondDate: document.getElementById('secondDate').value,
-        previousOne: document.getElementById('previousOne').value.trim(),
-        previousTwo: document.getElementById('previousTwo').value.trim(),
-        scoreTeam: document.getElementById('scorecardTeam').value.trim() || defaultMatchCentre.scoreTeam,
-        scoreRuns: document.getElementById('scorecardRuns').value,
-        scoreWickets: document.getElementById('scorecardWickets').value,
-        scoreOvers: document.getElementById('scorecardOvers').value
-      }));
-      document.getElementById('matchCentreMessage').textContent = 'Match centre updated.';
-      updateMatchCentre();
+  if (managedMatches) {
+    managedMatches.addEventListener('click', function (event) {
+      const matchId = event.target.dataset.matchId;
+      if (!matchId) return;
+      let matches = getMatches();
+      const item = event.target.closest('.managed-match');
+      if (event.target.classList.contains('delete-match')) {
+        matches = matches.filter(match => match.id !== matchId);
+        saveMatches(matches);
+        renderManagedMatches();
+        renderMatches();
+        return;
+      }
+      if (event.target.classList.contains('save-match')) {
+        const match = matches.find(entry => entry.id === matchId);
+        match.group = item.querySelector('.managed-match-group').value.trim();
+        match.date = item.querySelector('.managed-match-date').value;
+        match.time = item.querySelector('.managed-match-time').value;
+        match.maps = item.querySelector('.managed-match-maps').value.trim();
+        saveMatches(matches);
+        document.getElementById('matchManagerMessage').textContent = 'Match updated.';
+        renderMatches();
+      }
     });
   }
 
-  updateLiveScore();
-  updateNextMatch();
-  updateMatchCentre();
+  renderMatches();
+  window.setInterval(renderMatches, 30000);
   window.addEventListener('storage', function () {
-    updateLiveScore();
-    updateNextMatch();
-    updateMatchCentre();
+    renderMatches();
+    renderManagedMatches();
     renderVisitors();
   });
 });
