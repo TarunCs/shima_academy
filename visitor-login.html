@@ -1,42 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Enter Simha Cricket Academy</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enter Academy | Simha Cricket</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
-
 <body class="auth-page">
-  <main class="auth-card visitor-card">
-    <a class="brand auth-brand" href="visitor-login.html">
-      <span class="mark">🏏</span><span><strong>Simha Cricket</strong><small>Academy</small></span>
-    </a>
-    <div id="visitorStep">
-      <p class="eyebrow">Welcome to the academy</p>
-      <h1>Enter your details to continue.</h1>
-      <p class="description">We will use your phone number to verify your visit before showing the academy page.</p>
-      <form id="visitorForm">
-        <label for="visitorName">Your name<input id="visitorName" type="text" autocomplete="name" placeholder="Enter your name" required></label>
-        <label for="visitorPhone">Phone number<input id="visitorPhone" type="tel" autocomplete="tel" inputmode="numeric" placeholder="Enter your phone number" pattern="[0-9]{10}" maxlength="10" required></label>
-        <button type="submit">Get OTP</button>
-        <div id="visitorMessage" role="status"></div>
-      </form>
-    </div>
-    <div id="otpStep" hidden>
-      <p class="eyebrow">One-time verification</p>
-      <h1>Enter your OTP.</h1>
-      <p id="phoneSummary" class="description"></p>
-      <form id="otpForm">
-        <label for="otp">6-digit OTP<input id="otp" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="Enter OTP" required></label>
-        <div id="demoOtp" class="demo" role="status"></div>
-        <button type="submit">Verify and continue</button>
-        <div id="otpMessage" role="status"></div>
-      </form>
-    </div>
-  </main>
-  <script src="script.js"></script>
-</body>
+    <header class="auth-header">
+        <div class="container header-inner">
+            <a class="brand" href="visitor-login.html">
+                <span class="brand-icon">🏏</span>
+                <span class="brand-text">
+                    <strong>Simha Cricket</strong>
+                    <small>Academy</small>
+                </span>
+            </a>
+            <button id="darkModeToggle" class="dark-toggle" aria-label="Toggle dark mode">🌙</button>
+        </div>
+    </header>
 
+    <main class="auth-main">
+        <div class="auth-card visitor-card glass-card">
+
+            <!-- ===== STEP 1: Name + Phone ===== -->
+            <div id="visitorStep">
+                <div class="auth-heading">
+                    <h1>Welcome to the Academy</h1>
+                </div>
+                <p class="description">Enter your name and phone number to continue.</p>
+
+                <form id="visitorForm">
+                    <div class="form-group">
+                        <label for="visitorName">Full name</label>
+                        <input id="visitorName" type="text" placeholder="e.g. Ravi Kumar" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="visitorPhone">Phone number</label>
+                        <input id="visitorPhone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="e.g. 9876543210" required />
+                    </div>
+                    <button class="btn btn-primary" type="submit">Continue</button>
+                    <div id="formMessage" role="status"></div>
+                </form>
+            </div>
+
+            <!-- ===== STEP 2: OTP ===== -->
+            <div id="otpStep" hidden>
+                <div class="auth-heading">
+                    <h1>Verify your phone</h1>
+                </div>
+                <p class="description" id="phoneSummary">We sent a one-time code to your phone.</p>
+
+                <div class="demo" id="demoOtp" style="margin-bottom: 16px;">Demo OTP: 863254</div>
+
+                <form id="otpForm">
+                    <div class="form-group">
+                        <label for="otp">Enter OTP</label>
+                        <input id="otp" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="6-digit code" required />
+                    </div>
+                    <button class="btn btn-primary" type="submit">Verify &amp; Enter</button>
+                    <div id="otpMessage" role="status"></div>
+                </form>
+
+                <div style="margin-top: 16px; text-align: center;">
+                    <button class="btn btn-secondary" onclick="document.getElementById('otpStep').hidden = true; document.getElementById('visitorStep').hidden = false; document.getElementById('formMessage').textContent = '';" style="font-size: 0.85rem;">← Go back</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
 </html>
