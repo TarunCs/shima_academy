@@ -3,67 +3,63 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Enter Academy | Simha Cricket</title>
+    <title>Welcome | Simha Cricket Academy</title>
     <link rel="stylesheet" href="style.css" />
 </head>
 <body class="auth-page">
     <header class="auth-header">
-        <div class="container header-inner">
+        <div class="auth-header-inner">
             <a class="brand" href="visitor-login.html">
                 <span class="brand-icon">🏏</span>
                 <span class="brand-text">
-                    <strong>Simha Cricket</strong>
-                    <small>Academy</small>
+                    <strong>SIMHA CRICKET</strong>
+                    <small>ACADEMY</small>
                 </span>
             </a>
-            <button id="darkModeToggle" class="dark-toggle" aria-label="Toggle dark mode">🌙</button>
+            <button id="darkModeToggle" class="dark-toggle" aria-label="Toggle Dark Mode">🌙</button>
         </div>
     </header>
 
     <main class="auth-main">
-        <div class="auth-card visitor-card glass-card">
+        <div class="auth-card glass-card">
 
-            <!-- ===== STEP 1: Name + Phone ===== -->
+            <!-- Step 1: Name + Phone -->
             <div id="visitorStep">
-                <div class="auth-heading">
-                    <h1>Welcome to the Academy</h1>
-                </div>
-                <p class="description">Enter your name and phone number to continue.</p>
+                <h1 class="auth-title">Welcome To The Academy</h1>
+                <p class="auth-desc">Enter Your Name And Phone Number To Continue.</p>
 
                 <form id="visitorForm">
                     <div class="form-group">
-                        <label for="visitorName">Full name</label>
+                        <label for="visitorName">Full Name</label>
                         <input id="visitorName" type="text" placeholder="e.g. Ravi Kumar" required />
                     </div>
                     <div class="form-group">
-                        <label for="visitorPhone">Phone number</label>
+                        <label for="visitorPhone">Phone Number</label>
                         <input id="visitorPhone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="e.g. 9876543210" required />
                     </div>
                     <button class="btn btn-primary" type="submit">Continue</button>
-                    <div id="formMessage" role="status"></div>
+                    <div id="formMessage" class="status-msg"></div>
                 </form>
             </div>
 
-            <!-- ===== STEP 2: OTP ===== -->
+            <!-- Step 2: OTP -->
             <div id="otpStep" hidden>
-                <div class="auth-heading">
-                    <h1>Verify your phone</h1>
-                </div>
-                <p class="description" id="phoneSummary">We sent a one-time code to your phone.</p>
+                <h1 class="auth-title">Verify Your Phone</h1>
+                <p class="auth-desc" id="phoneSummary">We Generated A One-Time Code For Your Phone.</p>
 
-                <div class="demo" id="demoOtp" style="margin-bottom: 16px;">Demo OTP: 863254</div>
+                <div class="demo-box" id="demoOtp">Demo OTP: 863254</div>
 
                 <form id="otpForm">
                     <div class="form-group">
                         <label for="otp">Enter OTP</label>
-                        <input id="otp" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="6-digit code" required />
+                        <input id="otp" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="6-Digit Code" required />
                     </div>
-                    <button class="btn btn-primary" type="submit">Verify &amp; Enter</button>
-                    <div id="otpMessage" role="status"></div>
+                    <button class="btn btn-primary" type="submit">Verify &amp; Enter Academy</button>
+                    <div id="otpMessage" class="status-msg"></div>
                 </form>
 
-                <div style="margin-top: 16px; text-align: center;">
-                    <button class="btn btn-secondary" onclick="document.getElementById('otpStep').hidden = true; document.getElementById('visitorStep').hidden = false; document.getElementById('formMessage').textContent = '';" style="font-size: 0.85rem;">← Go back</button>
+                <div class="back-row">
+                    <button class="btn btn-secondary btn-small" id="backToVisitorBtn" type="button">← Go Back</button>
                 </div>
             </div>
 

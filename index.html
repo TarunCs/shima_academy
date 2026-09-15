@@ -9,182 +9,184 @@
 <body>
     <!-- ===== HEADER ===== -->
     <header>
-        <div class="container header-inner">
+        <div class="header-inner">
             <a class="brand" href="index.html">
                 <span class="brand-icon">🏏</span>
                 <span class="brand-text">
-                    <strong>Simha Cricket</strong>
-                    <small>Academy</small>
+                    <strong>SIMHA CRICKET</strong>
+                    <small>ACADEMY</small>
                 </span>
             </a>
             <nav>
-                <a href="#about">About</a>
-                <a href="#matches">Matches</a>
-                <a href="#training">Training</a>
-                <a href="#gallery">Gallery</a>
-                <a href="#register">Register</a>
-                <a href="#contact">Contact</a>
-                <a class="login-link" href="coach-login.html">Instructor Login</a>
-                <button id="darkModeToggle" class="dark-toggle" aria-label="Toggle dark mode">🌙</button>
+                <!-- Desktop Only Links -->
+                <a href="#about" class="nav-desktop">About</a>
+                <a href="#training" class="nav-desktop">Training</a>
+                <a href="#matches" class="nav-desktop">Matches</a>
+                <a href="#gallery" class="nav-desktop nav-hide-tablet">Gallery</a>
+                <a class="login-link nav-desktop" href="coach-login.html">Instructor Login</a>
+
+                <!-- Mobile Only Links -->
+                <a href="#register" class="nav-mobile">Register</a>
+                <a href="#contact" class="nav-mobile">Contact</a>
+                <a class="login-link nav-mobile" href="coach-login.html">Login</a>
+
+                <!-- Dark Mode Toggle -->
+                <button id="darkModeToggle" class="dark-toggle" aria-label="Toggle Dark Mode">🌙</button>
             </nav>
         </div>
     </header>
 
     <main>
-        <div class="container">
-            <!-- ===== HERO ===== -->
-            <section class="hero">
-                <div class="hero-content animate-in">
-                    <span class="eyebrow">Premier Cricket Development Centre</span>
-                    <h1>Build your game with <span>Simha Cricket</span> Academy.</h1>
-                    <p>Performance-driven training focused on disciplined, confident cricketers, with coaching and match experience for every stage.</p>
-                </div>
-                <aside class="hero-panel animate-in delay-1 glass-card">
-                    <h2>Academy board</h2>
-                    <p>Everything important at a glance.</p>
-                    <ul>
-                        <li>
-                            <strong>Training</strong>
-                            <span>Age 6–16 coaching sessions every Friday, Saturday, and Sunday.</span>
-                        </li>
-                        <li>
-                            <strong>Upcoming match</strong>
-                            <span data-next-match-summary>U-16 Challenge Cup · 12 Sep 2026 · 10:00</span>
-                        </li>
-                    </ul>
-                </aside>
-            </section>
+        <!-- ===== HERO ===== -->
+        <section class="hero hero-full">
+            <div class="section-inner">
+                <span class="eyebrow">Premier Cricket Development Centre</span>
+                <h1 class="hero-title">Build Your Game With <span>Simha Cricket</span> Academy.</h1>
+                <p class="hero-desc">Performance-Driven Training Focused On Disciplined, Confident Cricketers, With Coaching And Match Experience For Every Stage.</p>
+            </div>
+        </section>
 
-            <!-- ===== ABOUT ===== -->
-            <section class="section" id="about">
+        <!-- ===== ABOUT ===== -->
+        <section class="section section-alt" id="about">
+            <div class="section-inner">
                 <div class="section-header">
-                    <span class="eyebrow">About us</span>
-                    <h2 class="section-title">A place to learn, <span>compete</span>, and grow.</h2>
-                    <p class="section-desc">Simha Cricket Academy provides affordable, high-quality coaching for young players. Our program combines technical skills, match awareness, fitness, and confidence.</p>
+                    <span class="eyebrow">About Us</span>
+                    <h2 class="section-title">A Place To <span>Learn, Compete,</span> And Grow.</h2>
+                    <p class="section-desc">Simha Cricket Academy Provides Affordable, High-Quality Coaching For Young Players. Our Program Combines Technical Skills, Match Awareness, Fitness, And Confidence.</p>
                 </div>
                 <div class="grid-3">
                     <article class="card glass-card">
-                        <h3>Our mission</h3>
-                        <p>To develop confident cricketers who play with skill, respect, and belief.</p>
+                        <h3>Our Mission</h3>
+                        <p>To Develop Confident Cricketers Who Play With Skill, Respect, And Belief.</p>
                     </article>
                     <article class="card glass-card">
-                        <h3>Our coaches</h3>
-                        <p>Former players and experienced trainers guide each cricketer through practical, focused sessions.</p>
+                        <h3>Our Coaches</h3>
+                        <p>Former Players And Experienced Trainers Guide Each Cricketer Through Practical, Focused Sessions.</p>
                     </article>
                     <article class="card glass-card">
-                        <h3>Our values</h3>
-                        <p>Teamwork, consistency, sportsmanship, and the courage to keep improving.</p>
+                        <h3>Our Values</h3>
+                        <p>Teamwork, Consistency, Sportsmanship, And The Courage To Keep Improving.</p>
                     </article>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- ===== TRAINING ===== -->
-            <section class="section" id="training">
+        <!-- ===== TRAINING ===== -->
+        <section class="section" id="training">
+            <div class="section-inner">
                 <div class="section-header">
-                    <span class="eyebrow">Academy programs</span>
-                    <h2 class="section-title">Training that <span>fits</span> the week.</h2>
+                    <span class="eyebrow">Academy Programs</span>
+                    <h2 class="section-title">Training That <span>Fits</span> The Week.</h2>
                 </div>
                 <div class="grid-2">
                     <article class="card glass-card">
                         <h3>Outreach Simha Cricket Academy</h3>
-                        <p><strong>Age 6–16</strong></p>
+                        <p class="card-meta"><strong>Age 6–16</strong></p>
                         <p>Friday 4–6 PM · Saturday 6:30–8:30 AM, 3–5 PM, 4–6 PM · Sunday 6:30–8:30 AM, 7:30–9:30 AM</p>
                     </article>
                     <article class="card glass-card">
                         <h3>Rashtreeya Vidyalaya Public School</h3>
-                        <p><strong>Age 6–16</strong></p>
-                        <p>Second &amp; fourth Saturday 9–11 AM · First &amp; third Saturday 3–5 PM · Sunday 9–11 AM</p>
+                        <p class="card-meta"><strong>Age 6–16</strong></p>
+                        <p>Second &amp; Fourth Saturday 9–11 AM · First &amp; Third Saturday 3–5 PM · Sunday 9–11 AM</p>
                     </article>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- ===== MATCHES ===== -->
-            <section class="section" id="matches">
+        <!-- ===== MATCHES ===== -->
+        <section class="section section-alt" id="matches">
+            <div class="section-inner">
                 <div class="section-header">
-                    <span class="eyebrow">Match centre</span>
-                    <h2 class="section-title">Upcoming <span>matches</span>.</h2>
+                    <span class="eyebrow">Match Centre</span>
+                    <h2 class="section-title">Upcoming <span>Matches</span>.</h2>
                 </div>
                 <ul class="matches-grid" data-upcoming-matches></ul>
-            </section>
+            </div>
+        </section>
 
-            <!-- ===== GALLERY ===== -->
-            <section class="section" id="gallery">
+        <!-- ===== GALLERY ===== -->
+        <section class="section" id="gallery">
+            <div class="section-inner">
                 <div class="section-header">
                     <span class="eyebrow">Gallery</span>
-                    <h2 class="section-title">Life around the <span>academy</span>.</h2>
+                    <h2 class="section-title">Life Around The <span>Academy</span>.</h2>
                 </div>
                 <div class="gallery">
                     <figure class="glass-card">
-                        <img src="https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?auto=format&fit=crop&w=900&q=80" alt="Cricket match on a field" loading="lazy" />
-                        <figcaption>Match day focus</figcaption>
+                        <img src="https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?auto=format&fit=crop&w=900&q=80" alt="Cricket Match" loading="lazy" />
+                        <figcaption>Match Day Focus</figcaption>
                     </figure>
                     <figure class="glass-card">
-                        <img src="https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=900&q=80" alt="Cricket player preparing to bat" loading="lazy" />
-                        <figcaption>Building technique</figcaption>
+                        <img src="https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=900&q=80" alt="Cricket Player" loading="lazy" />
+                        <figcaption>Building Technique</figcaption>
                     </figure>
                     <figure class="glass-card">
-                        <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=900&q=80" alt="Athletes training outdoors" loading="lazy" />
-                        <figcaption>Training together</figcaption>
+                        <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=900&q=80" alt="Training" loading="lazy" />
+                        <figcaption>Training Together</figcaption>
                     </figure>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- ===== REGISTER (Full form – name, phone, email, message) ===== -->
-            <section class="section" id="register">
+        <!-- ===== REGISTER ===== -->
+        <section class="section section-alt" id="register">
+            <div class="section-inner">
                 <div class="section-header">
-                    <span class="eyebrow">Join the academy</span>
-                    <h2 class="section-title">Start your <span>cricket</span> journey.</h2>
-                    <p class="section-desc">Tell us a little about the player and our coaching team will get back to you.</p>
+                    <span class="eyebrow">Join The Academy</span>
+                    <h2 class="section-title">Start Your <span>Cricket</span> Journey.</h2>
+                    <p class="section-desc">Tell Us A Little About The Player And Our Coaching Team Will Get Back To You.</p>
                 </div>
                 <form class="register-form" id="registerForm" action="mailto:coach@simhaacademy.com" method="post" enctype="text/plain">
                     <div class="form-group">
-                        <label for="player-name">Player name</label>
+                        <label for="player-name">Player Name</label>
                         <input id="player-name" name="player-name" type="text" required />
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="parent-phone">Phone number</label>
+                            <label for="parent-phone">Phone Number</label>
                             <input id="parent-phone" name="phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required />
                         </div>
                         <div class="form-group">
-                            <label for="parent-email">Parent or guardian email</label>
+                            <label for="parent-email">Parent Or Guardian Email</label>
                             <input id="parent-email" name="email" type="email" required />
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="player-message">Message</label>
-                        <textarea id="player-message" name="message" placeholder="Age, preferred program, or questions"></textarea>
+                        <textarea id="player-message" name="message" placeholder="Age, Preferred Program, Or Questions"></textarea>
                     </div>
-                    <button class="btn btn-primary" type="submit">Send registration request</button>
-                    <div id="registrationMessage" role="status"></div>
+                    <button class="btn btn-primary" type="submit">Send Registration Request</button>
+                    <div id="registrationMessage" class="status-msg"></div>
                 </form>
-            </section>
+            </div>
+        </section>
 
-            <!-- ===== CONTACT ===== -->
-            <section class="section" id="contact">
+        <!-- ===== CONTACT ===== -->
+        <section class="section" id="contact">
+            <div class="section-inner">
                 <div class="section-header">
                     <span class="eyebrow">Contact</span>
-                    <h2 class="section-title">Let's <span>talk</span> cricket.</h2>
+                    <h2 class="section-title">Let's <span>Talk</span> Cricket.</h2>
                 </div>
                 <div class="grid-2">
                     <article class="card glass-card">
-                        <h3>Academy office</h3>
+                        <h3>Academy Office</h3>
                         <ul class="contact-list">
                             <li>Email: <a href="mailto:coach@simhaacademy.com">coach@simhaacademy.com</a></li>
-                            <li>Normal enquiries: <a href="tel:+919632548209">9632548209</a> / <a href="tel:+919845200072">9845200072</a></li>
-                            <li>Fees enquiries: <a href="tel:+919845200072">9845200072</a></li>
+                            <li>Normal Enquiries: <a href="tel:+919632548209">9632548209</a> / <a href="tel:+919845200072">9845200072</a></li>
+                            <li>Fees Enquiries: <a href="tel:+919845200072">9845200072</a></li>
                             <li>Hours: Monday–Saturday, 9 AM–6 PM</li>
                         </ul>
                     </article>
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
     </main>
 
     <!-- ===== FOOTER ===== -->
     <footer>
-        <div class="container">
-            © 2026 Simha Cricket Academy. Train with purpose.
+        <div class="footer-inner">
+            © 2026 Simha Cricket Academy. Train With Purpose.
         </div>
     </footer>
 
