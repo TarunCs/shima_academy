@@ -172,9 +172,7 @@ body.dark-mode { background: var(--bg-body); }
     border-color: var(--gold);
     background: rgba(212, 175, 55, 0.15);
 }
-.dark-toggle:active {
-    transform: scale(0.94);
-}
+.dark-toggle:active { transform: scale(0.94); }
 
 /* ===== HEADER ===== */
 header {
@@ -1101,4 +1099,43 @@ body.dark-mode .preview-frame {
     .preview-frame { padding: 24px 20px; }
     .preview-frame .matches-grid { grid-template-columns: 1fr; }
     .dash-actions { width: 100%; justify-content: flex-start; }
+}
+
+/* ============================================================
+   ===== INSTRUCTOR SHORTCUT (on visitor-login.html) =====
+   ============================================================ */
+.instructor-shortcut {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--border-light);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.instructor-shortcut .instructor-link {
+    color: var(--gold);
+    font-weight: 700;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: var(--transition);
+    letter-spacing: 0.02em;
+}
+
+.instructor-shortcut .instructor-link:hover {
+    border-bottom-color: var(--gold);
+    color: var(--gold-light);
+}
+
+@media (max-width: 480px) {
+    .instructor-shortcut {
+        flex-direction: column;
+        gap: 6px;
+        font-size: 0.8rem;
+    }
 }

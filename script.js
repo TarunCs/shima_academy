@@ -1,6 +1,3 @@
-// ============================================================
-// SAFE "READY" WRAPPER — works even if DOM is already loaded
-// ============================================================
 function ready(fn) {
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', fn);
@@ -12,20 +9,54 @@ function ready(fn) {
 ready(function () {
 
     // ============================================================
+    // 0. VISITOR GATE REDIRECT — runs first, before anything else
+    // ============================================================
+    const path = window.location.pathname;
+    const isIndexPage =
+        path.endsWith('index.html') ||
+        path === '/' ||
+        path === '' ||
+        path.endsWith('/');
+
+    function isPageReload() {
+        try {
+            const entries = performance.getEntriesByType('navigation');
+            if (entries && entries.length) return entries[0].type === 'reload';
+            if (performance.navigation) return performance.navigation.type === 1;
+        } catch (e) {}
+        return false;
+    }
+
+    if (isIndexPage) {
+        const reloaded = isPageReload();
+        const verified = localStorage.getItem('simhaVisitorVerified') === 'true';
+
+        // Redirect to visitor login if:
+        //   - The user just reloaded the index page, OR
+        //   - The user hasn't verified yet
+        if (reloaded || !verified) {
+            // Clear verified flag on reload so the gate always re-appears
+            if (reloaded) {
+                try { localStorage.removeItem('simhaVisitorVerified'); } catch (e) {}
+            }
+            window.location.replace('visitor-login.html');
+            return; // Stop everything else
+        }
+    }
+
+    // ============================================================
     // 1. DARK MODE TOGGLE
     // ============================================================
     const toggleBtn = document.getElementById('darkModeToggle');
     const bodyEl = document.body;
 
-    // Apply stored theme
     try {
         if (localStorage.getItem('simhaDarkMode') === 'dark') {
             bodyEl.classList.add('dark-mode');
             if (toggleBtn) toggleBtn.textContent = '☀️';
         }
-    } catch (e) { /* localStorage blocked */ }
+    } catch (e) {}
 
-    // Attach click handler (works on tap & click)
     if (toggleBtn) {
         toggleBtn.setAttribute('type', 'button');
         toggleBtn.addEventListener('click', function (e) {
@@ -34,9 +65,7 @@ ready(function () {
             bodyEl.classList.toggle('dark-mode');
             const isDark = bodyEl.classList.contains('dark-mode');
             toggleBtn.textContent = isDark ? '☀️' : '🌙';
-            try {
-                localStorage.setItem('simhaDarkMode', isDark ? 'dark' : 'light');
-            } catch (err) { /* ignore */ }
+            try { localStorage.setItem('simhaDarkMode', isDark ? 'dark' : 'light'); } catch (err) {}
         });
     }
 
@@ -96,6 +125,21 @@ ready(function () {
         });
         if (changed) localStorage.setItem(VISITORS_KEY, JSON.stringify(visitors));
         return visitors;
+    }
+
+    function saveGateVisitor(name, phone) {
+        const visitors = JSON.parse(localStorage.getItem(VISITORS_KEY) || '[]');
+        visitors.push({
+            id: 'visitor-' + Date.now(),
+            name: name || 'Unknown',
+            phone: phone || 'Not Provided',
+            email: '',
+            message: '',
+            visitedAt: new Date().toISOString(),
+            from: 'gate'
+        });
+        localStorage.setItem(VISITORS_KEY, JSON.stringify(visitors));
+        localStorage.setItem('simhaVisitorVerified', 'true');
     }
 
     // ============================================================
@@ -165,7 +209,7 @@ ready(function () {
     }
 
     // ============================================================
-    // 6. VISITOR GATE – name + phone + OTP
+    // 6. VISITOR GATE (standalone visitor-login.html only)
     // ============================================================
     const visitorForm = document.getElementById('visitorForm');
     const otpForm = document.getElementById('otpForm');
@@ -205,18 +249,10 @@ ready(function () {
                 otpMessage.textContent = 'That OTP Is Incorrect. Please Try Again.';
                 return;
             }
-            const visitors = JSON.parse(localStorage.getItem(VISITORS_KEY) || '[]');
-            visitors.push({
-                id: 'visitor-' + Date.now(),
-                name: sessionStorage.getItem('simhaVisitorName') || 'Unknown',
-                phone: sessionStorage.getItem('simhaVisitorPhone') || 'Not Provided',
-                email: '',
-                message: '',
-                visitedAt: new Date().toISOString(),
-                from: 'gate'
-            });
-            localStorage.setItem(VISITORS_KEY, JSON.stringify(visitors));
-            localStorage.setItem('simhaVisitorVerified', 'true');
+            saveGateVisitor(
+                sessionStorage.getItem('simhaVisitorName'),
+                sessionStorage.getItem('simhaVisitorPhone')
+            );
             window.location.replace('index.html');
         });
 
@@ -347,7 +383,7 @@ ready(function () {
         });
     }
 
-    // ---- 8c. Delete listener (works on both lists) ----
+    // ---- 8c. Delete listener ----
     function setupDeleteListener(container) {
         if (!container) return;
         container.addEventListener('click', function (e) {
@@ -381,6 +417,10 @@ ready(function () {
             const ok = email === 'coach@simhaacademy.com' && pwd === '863254';
             msg.textContent = ok ? 'Login Successful.' : 'Incorrect Login Details.';
             if (ok) {
+                // ✅ Mark the session as verified so "Back To Academy" works
+                //    without getting redirected to the visitor gate.
+                try { localStorage.setItem('simhaVisitorVerified', 'true'); } catch (err) {}
+
                 if (loginSection) loginSection.hidden = true;
                 document.querySelector('.instructor-card').classList.add('dashboard-wide');
                 if (dashboard) dashboard.hidden = false;
@@ -392,7 +432,7 @@ ready(function () {
         });
     }
 
-    // ---- 8e. Render managed matches (editable list) ----
+    // ---- 8e. Render managed matches ----
     function renderManagedMatches() {
         if (!managedMatches) return;
         managedMatches.replaceChildren();
@@ -411,7 +451,7 @@ ready(function () {
         });
     }
 
-    // ---- 8f. Live preview of index page matches ----
+    // ---- 8f. Live preview ----
     function renderPreviewMatches() {
         const list = document.getElementById('previewMatchesGrid');
         if (!list) return;
@@ -531,16 +571,7 @@ ready(function () {
     }
 
     // ============================================================
-    // 9. REDIRECT IF NOT VERIFIED
-    // ============================================================
-    if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname === '') {
-        if (localStorage.getItem('simhaVisitorVerified') !== 'true') {
-            window.location.replace('visitor-login.html');
-        }
-    }
-
-    // ============================================================
-    // 10. INITIAL RENDERS & AUTO-UPDATE
+    // 9. INITIAL RENDERS & AUTO-UPDATE
     // ============================================================
     renderMatches();
     setInterval(renderMatches, 30000);
